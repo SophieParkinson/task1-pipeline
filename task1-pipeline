@@ -1,10 +1,22 @@
 pipeline {
   agent none
   stages {
+    stage('Container cleanup') {
+      agent any
+      steps {
+        sh 'docker stop sophiesapp'
+      }
+    }
     stage('Container build') {
       agent any
       steps {
         sh 'docker build -t app:latest .'
+      }
+    }
+    stage('Container run') {
+      agent any
+      steps {
+        sh 'docker run -d -p 5500:5500 --name sophiesapp app:latest'
       }
     }
   }
